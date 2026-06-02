@@ -34,7 +34,7 @@ const projects: Project[] = [
       "Full-stack profile management system with GitHub OAuth 2.0 + PKCE, natural language search, role-based access control, and a matching CLI tool.",
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "JWT"],
     contribution:
-      "Built the entire backend: auth flows, role enforcement, NLP query parser, API versioning middleware, token blacklisting, and the CLI client.",
+      "Architected and built the entire backend from scratch: designed the database schema and request flow, implemented GitHub OAuth 2.0 with PKCE for both web and CLI clients, built a role-based access control system with admin/user separation, created a rule-based NLP query parser that converts plain English into parameterised SQL, added API versioning middleware, Redis-backed session management with token blacklisting and auto-refresh, CSV export for admins, and a full CLI client that authenticates via device-code flow.",
     live: "https://ubiquitous-chainsaw-production-73a8.up.railway.app/",
     source: "https://github.com/Zubbee18/ubiquitous-chainsaw",
     extraLinks: [
@@ -55,7 +55,7 @@ const projects: Project[] = [
       "Background retry service that handles failed HTTP requests with exponential backoff, jitter, dead-letter queuing, and full attempt history.",
     stack: ["Node.js", "Express", "SQLite"],
     contribution:
-      "Designed the worker loop, backoff algorithm, per-attempt jitter, dead-letter logic, and the attempt history schema.",
+      "Designed the system architecture: a polling worker that picks up failed requests from SQLite, applies exponential backoff with per-attempt jitter to avoid thundering herd, and routes permanently failed requests to a dead-letter queue. Built the full attempt history schema so every retry is auditable, implemented configurable max-retry limits, and exposed status and history endpoints for monitoring.",
     source: "https://github.com/Zubbee18/retry-engine",
   },
   {
@@ -65,13 +65,14 @@ const projects: Project[] = [
       "Backend for an AI-powered talent assessment and employer-candidate matching platform, built collaboratively during HNG Stage 8.",
     stack: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger"],
     contribution:
-      "Fixed broken resource links across the platform by integrating the YouTube Data API and Serper Dev to fetch and validate URLs directly instead of relying on stale hardcoded links. Also contributed to the employer domain, assessment flows, auth module hardening, and Swagger documentation.",
+      "Identified and fixed the broken resource links issue that was affecting the entire platform: integrated the YouTube Data API and Serper Dev to dynamically fetch and validate learning resource URLs instead of relying on stale hardcoded links. Beyond that, contributed to the employer domain (company profiles, job postings), built parts of the assessment flow logic, hardened the auth module with proper guard decorators and role checks, and wrote Swagger documentation for multiple endpoint groups.",
     source: "https://github.com/hngprojects/skill-bridge-api",
   },
 ];
 
 const skills = [
   { name: "REST API Design", project: "Insighta" },
+  { name: "System Design & Architecture", project: "Insighta, SkillBridge" },
   { name: "GitHub OAuth 2.0 + PKCE", project: "Insighta" },
   { name: "JWT Auth & Token Blacklisting", project: "Insighta, SkillBridge" },
   { name: "PostgreSQL & Schema Design", project: "Insighta, SkillBridge" },
