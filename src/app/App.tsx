@@ -23,6 +23,7 @@ type Project = {
   contribution: string;
   live?: string;
   source?: string;
+  extraLinks?: { label: string; url: string }[];
 };
 
 const projects: Project[] = [
@@ -34,8 +35,18 @@ const projects: Project[] = [
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "JWT"],
     contribution:
       "Built the entire backend — auth flows, role enforcement, NLP query parser, API versioning middleware, token blacklisting, and the CLI client.",
-    live: "https://ubiquitous-chainsaw-production-5f71.up.railway.app",
+    live: "https://ubiquitous-chainsaw-production-73a8.up.railway.app/",
     source: "https://github.com/Zubbee18/ubiquitous-chainsaw",
+    extraLinks: [
+      {
+        label: "Web Portal",
+        url: "https://github.com/Zubbee18/insighta-web-portal",
+      },
+      {
+        label: "CLI Tool",
+        url: "https://github.com/Zubbee18/insighta-cli-tool",
+      },
+    ],
   },
   {
     name: "HTTP Retry Engine",
@@ -335,6 +346,18 @@ export default function App() {
                       Source <ExternalLink size={10} />
                     </a>
                   )}
+                  {p.extraLinks?.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] uppercase"
+                      style={{ letterSpacing: "1px" }}
+                    >
+                      {link.label} <ExternalLink size={10} />
+                    </a>
+                  ))}
                 </div>
               </div>
             ))}
