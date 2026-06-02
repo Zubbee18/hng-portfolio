@@ -34,7 +34,7 @@ const projects: Project[] = [
       "Full-stack profile management system with GitHub OAuth 2.0 + PKCE, natural language search, role-based access control, and a matching CLI tool.",
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "JWT"],
     contribution:
-      "Architected and built the entire backend from scratch: designed the database schema and request flow, implemented GitHub OAuth 2.0 with PKCE for both web and CLI clients, built a role-based access control system with admin/user separation, created a rule-based NLP query parser that converts plain English into parameterised SQL, added API versioning middleware, Redis-backed session management with token blacklisting and auto-refresh, CSV export for admins, and a full CLI client that authenticates via device-code flow.",
+      "Architected and built the entire backend from scratch: designed the PostgreSQL schema for profiles and users, implemented GitHub OAuth 2.0 with PKCE (S256 challenge) for both web and CLI clients with HTTP-only cookie transport and Authorization header support respectively. Built role-based access control (admin/analyst separation), a rule-based NLP query parser that converts plain English like 'adult males from Kenya' into parameterised SQL by resolving country names via REST Countries API to ISO codes and mapping age keywords to numeric ranges. Added API versioning middleware (X-API-Version header enforcement), Redis-backed rate limiting (auth: 10/min, API: 60/min with IPv6 subnet grouping), token blacklisting on logout/refresh, transparent token auto-refresh for both web and CLI, admin CSV export, profile aggregation dashboard, and the full CLI tool with device-code auth flow. Integrated Genderize.io, Agify.io, and Nationalize.io for name classification.",
     live: "https://ubiquitous-chainsaw-production-73a8.up.railway.app/",
     source: "https://github.com/Zubbee18/ubiquitous-chainsaw",
     extraLinks: [
@@ -55,7 +55,7 @@ const projects: Project[] = [
       "Background retry service that handles failed HTTP requests with exponential backoff, jitter, dead-letter queuing, and full attempt history.",
     stack: ["Node.js", "Express", "SQLite"],
     contribution:
-      "Designed the system architecture: a polling worker that picks up failed requests from SQLite, applies exponential backoff with per-attempt jitter to avoid thundering herd, and routes permanently failed requests to a dead-letter queue. Built the full attempt history schema so every retry is auditable, implemented configurable max-retry limits, and exposed status and history endpoints for monitoring.",
+      "Designed and built the complete system: a 500ms-interval polling worker that queries SQLite for pending/retrying jobs whose nextRetryAt has elapsed, executes the HTTP request, and routes the result based on status code. 2xx marks completed, 4xx marks permanently failed (no retry), 5xx triggers exponential backoff (backoffMs * 2^attempt * jitter where jitter is 0.8-1.2 per attempt to prevent thundering herd). When attemptCount exceeds configurable maxRetries (default 5), the job moves to failed status as a dead-letter. Every attempt is recorded in a separate attempts table with status and message for full auditability. Built the REST API: POST /request for job submission with URL/method/body validation, GET /requests/:id with joined attempt history, and GET /requests?status= for filtering. All DB mutations use SQLite transactions for atomicity.",
     source: "https://github.com/Zubbee18/retry-engine",
   },
   {
@@ -65,7 +65,7 @@ const projects: Project[] = [
       "Backend for an AI-powered talent assessment and employer-candidate matching platform, built collaboratively during HNG Stage 8.",
     stack: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger"],
     contribution:
-      "Identified and fixed the broken resource links issue that was affecting the entire platform: integrated the YouTube Data API and Serper Dev to dynamically fetch and validate learning resource URLs instead of relying on stale hardcoded links. Beyond that, contributed to the employer domain (company profiles, job postings), built parts of the assessment flow logic, hardened the auth module with proper guard decorators and role checks, and wrote Swagger documentation for multiple endpoint groups.",
+      "Resolved AI-hallucinated broken resource URLs by building a UrlResolutionService that validates links via YouTube Data API v3 and Serper.dev Google Search, replacing fabricated URLs the LLM was generating. Built the full employer verification and trust layer: schema design, SSRF-hardened website reachability checks, LinkedIn validation, verification gates blocking unverified employers from sending offers or contacting candidates, hire-complete flow, and public employer profiles. Fixed skill assessment retake blocking, corrected question count mismatches across skill and advanced assessments, added configurable timeouts to all AI calls with background cache warming, served general learning resources pre-assessment, standardized all API responses to snake_case, and converted skill assessments to MCQ-only scoring. 29 merged PRs total.",
     source: "https://github.com/hngprojects/skill-bridge-api",
   },
 ];
@@ -77,9 +77,11 @@ const skills = [
   { name: "JWT Auth & Token Blacklisting", project: "Insighta, SkillBridge" },
   { name: "PostgreSQL & Schema Design", project: "Insighta, SkillBridge" },
   { name: "Redis (sessions, blacklist)", project: "Insighta" },
+  { name: "External API Integration", project: "SkillBridge" },
   { name: "Background Jobs & Workers", project: "Retry Engine" },
   { name: "Exponential Backoff & Jitter", project: "Retry Engine" },
   { name: "NestJS + TypeScript", project: "SkillBridge" },
+  { name: "Unit Testing", project: "SkillBridge" },
   { name: "Deployment (Railway)", project: "Insighta" },
   { name: "CLI Development", project: "Insighta CLI" },
 ];
@@ -432,25 +434,32 @@ export default function App() {
                   ["GET /api/profiles/search", "Natural language query"],
                   ["GET /api/profiles/dashboard", "Aggregated analytics"],
                   ["GET /api/profiles/export", "Admin CSV export"],
-                ].map(([endpoint, label]) => (
-                  <div
-                    key={endpoint}
-                    className="flex items-start justify-between gap-4"
-                  >
-                    <span
-                      className="text-[12px]"
-                      style={{ fontFamily: mono, opacity: 0.7 }}
+                ].map(([endpoint, label]) => {
+                  const path = endpoint.split(" ")[1];
+                  const href = `https://ubiquitous-chainsaw-production-73a8.up.railway.app${path}`;
+                  return (
+                    <div
+                      key={endpoint}
+                      className="flex items-start justify-between gap-4"
                     >
-                      {endpoint}
-                    </span>
-                    <span
-                      className="opacity-40 text-[11px] whitespace-nowrap pt-0.5"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                ))}
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[12px] hover:opacity-100 transition-opacity"
+                        style={{ fontFamily: mono, opacity: 0.7 }}
+                      >
+                        {endpoint}
+                      </a>
+                      <span
+                        className="opacity-40 text-[11px] whitespace-nowrap pt-0.5"
+                        style={{ fontWeight: 300 }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -473,10 +482,9 @@ export default function App() {
                 >
                   "female adults from Nigeria under 30"
                 </span>{" "}
-                to parameterised SQL conditions, resolving country names
-                through the REST Countries API to ISO 3166 codes, and mapping
-                age keywords to numeric ranges. No LLMs, no external NLP
-                service.
+                to parameterised SQL conditions, resolving country names through
+                the REST Countries API to ISO 3166 codes, and mapping age
+                keywords to numeric ranges. No LLMs, no external NLP service.
               </p>
             </div>
           </div>
