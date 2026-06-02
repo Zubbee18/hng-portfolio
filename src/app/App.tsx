@@ -28,13 +28,13 @@ type Project = {
 
 const projects: Project[] = [
   {
-    name: "Insighta — Profiles API",
+    name: "Insighta Profiles API",
     year: "2025",
     description:
       "Full-stack profile management system with GitHub OAuth 2.0 + PKCE, natural language search, role-based access control, and a matching CLI tool.",
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "JWT"],
     contribution:
-      "Built the entire backend — auth flows, role enforcement, NLP query parser, API versioning middleware, token blacklisting, and the CLI client.",
+      "Built the entire backend: auth flows, role enforcement, NLP query parser, API versioning middleware, token blacklisting, and the CLI client.",
     live: "https://ubiquitous-chainsaw-production-73a8.up.railway.app/",
     source: "https://github.com/Zubbee18/ubiquitous-chainsaw",
     extraLinks: [
@@ -65,7 +65,7 @@ const projects: Project[] = [
       "Backend for an AI-powered talent assessment and employer-candidate matching platform, built collaboratively during HNG Stage 8.",
     stack: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger"],
     contribution:
-      "Contributed to employer domain, assessment flows, auth module hardening, and Swagger documentation.",
+      "Fixed broken resource links across the platform by integrating the YouTube Data API and Serper Dev to fetch and validate URLs directly instead of relying on stale hardcoded links. Also contributed to the employer domain, assessment flows, auth module hardening, and Swagger documentation.",
     source: "https://github.com/hngprojects/skill-bridge-api",
   },
 ];
@@ -90,7 +90,7 @@ const reflections = [
   },
   {
     title: "Backoff and jitter are not optional in distributed systems",
-    body: "Building the retry engine made me understand thundering herd problems in practice. Doubling the delay per retry is obvious — rolling fresh jitter per attempt, not once, is the subtlety I would have missed without working through it hands-on.",
+    body: "Building the retry engine made me understand thundering herd problems in practice. Doubling the delay per retry is obvious, but rolling fresh jitter per attempt, not once, is the subtlety I would have missed without working through it hands-on.",
   },
   {
     title: "Auth is the part you cannot get wrong",
@@ -170,7 +170,7 @@ export default function App() {
             : "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(255,200,215,0.7) 0%, rgba(255,220,225,0.4) 40%, rgba(255,255,255,0) 100%)",
         }}
       />
-      <div className="relative z-10 mx-auto w-full max-w-[512px] px-8">
+      <div className="relative z-10 mx-auto w-full max-w-[640px] px-6 sm:px-8">
         {/* HERO */}
         <section className="pt-28 pb-12">
           <div className="flex items-center justify-between">
@@ -222,7 +222,7 @@ export default function App() {
           >
             Backend engineer based in Enugu, Nigeria. Over the past months at
             HNG I shipped a profile management API with GitHub OAuth and NLP
-            search, a distributed retry engine, and contributed to SkillBridge —
+            search, a distributed retry engine, and contributed to SkillBridge,
             a talent assessment platform built in NestJS. I care about systems
             that are honest, operable, and built to last.
           </p>
@@ -319,7 +319,7 @@ export default function App() {
                     className="opacity-50 uppercase text-[10px]"
                     style={{ letterSpacing: "1px", fontFamily: mono }}
                   >
-                    My work —{" "}
+                    My work:{" "}
                   </span>
                   {p.contribution}
                 </p>
@@ -376,7 +376,7 @@ export default function App() {
             className="opacity-50 text-[12px] uppercase pt-1"
             style={{ fontFamily: mono, letterSpacing: "1px" }}
           >
-            Insighta — Deep Dive
+            Insighta Deep Dive
           </p>
 
           <div className="pt-8 flex flex-col gap-8">
@@ -472,7 +472,7 @@ export default function App() {
                 >
                   "female adults from Nigeria under 30"
                 </span>{" "}
-                to parameterised SQL conditions — resolving country names
+                to parameterised SQL conditions, resolving country names
                 through the REST Countries API to ISO 3166 codes, and mapping
                 age keywords to numeric ranges. No LLMs, no external NLP
                 service.

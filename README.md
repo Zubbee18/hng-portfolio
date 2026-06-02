@@ -1,4 +1,4 @@
-# Deborah Anyachukwu — Backend Engineer Portfolio
+# Deborah Anyachukwu - Backend Engineer Portfolio
 
 Portfolio page showcasing my backend work during the HNG internship. Built with React, Vite, and Tailwind CSS.
 
@@ -7,11 +7,11 @@ Portfolio page showcasing my backend work during the HNG internship. Built with 
 - React 18 + TypeScript
 - Vite
 - Tailwind CSS v4
-- Deployed on Railway
+- Deployed on Vercel
 
 ## What This Portfolio Communicates
 
-I wanted a reviewer to open this page, spend 3–5 minutes, and walk away knowing exactly what I can build as a backend engineer. The projects listed are real systems I shipped and the featured deep-dive shows how I think through architecture decisions.
+I wanted a anyone to open this page, and walk away knowing exactly what I can build as a backend engineer. The projects listed are real systems I shipped and the featured deep-dive shows how I think through architecture decisions.
 
 ## Running Locally
 
