@@ -28,8 +28,8 @@ type Project = {
 
 const projects: Project[] = [
   {
-    name: "Insighta Profiles API",
-    year: "2025",
+    name: "Insighta Profiles API, Web Portal & CLI Tool",
+    year: "Apr 2026",
     description:
       "Full-stack profile management system with GitHub OAuth 2.0 + PKCE, natural language search, role-based access control, and a matching CLI tool.",
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "JWT"],
@@ -50,7 +50,7 @@ const projects: Project[] = [
   },
   {
     name: "HTTP Retry Engine",
-    year: "2025",
+    year: "May 2026",
     description:
       "Background retry service that handles failed HTTP requests with exponential backoff, jitter, dead-letter queuing, and full attempt history.",
     stack: ["Node.js", "Express", "SQLite"],
@@ -60,7 +60,7 @@ const projects: Project[] = [
   },
   {
     name: "SkillBridge API",
-    year: "2026",
+    year: "May 2026",
     description:
       "Backend for an AI-powered talent assessment and employer-candidate matching platform, built collaboratively during HNG Stage 8.",
     stack: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger"],
