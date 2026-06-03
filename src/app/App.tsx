@@ -10,6 +10,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const mono = "'JetBrains Mono', 'Consolas', ui-monospace, monospace";
 const script = "'Monsieur La Doulaise', cursive";
@@ -594,6 +595,7 @@ export default function App() {
           </button>
         </footer>
       </div>
+      <Analytics />
     </div>
   );
 }
