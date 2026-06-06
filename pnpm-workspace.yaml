@@ -1,5 +1,6 @@
 packages:
-  - '.'
+  - "."
 allowBuilds:
-  '@tailwindcss/oxide': true
+  "@tailwindcss/oxide": true
   esbuild: true
+  msw: true

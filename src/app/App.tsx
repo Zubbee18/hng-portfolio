@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { LinkPreview } from "./components/ui/link-preview";
 
 const mono = "'JetBrains Mono', 'Consolas', ui-monospace, monospace";
 const script = "'Monsieur La Doulaise', cursive";
@@ -348,15 +349,12 @@ export default function App() {
                     </a>
                   )}
                   {p.source && (
-                    <a
-                      href={p.source}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <LinkPreview
+                      url={p.source}
                       className="opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] uppercase"
-                      style={{ letterSpacing: "1px" }}
                     >
                       Source <ExternalLink size={10} />
-                    </a>
+                    </LinkPreview>
                   )}
                   {p.extraLinks?.map((link) => (
                     <a
