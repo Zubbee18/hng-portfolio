@@ -292,24 +292,45 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
 
     // Split the plain text chunk by double asterisks for bolding
     const subChunks = chunk.split(/(\*\*[^*]+\*\*)/g);
-    return subChunks.map((subChunk, subIdx) => {
+    return subChunks.flatMap((subChunk, subIdx) => {
       if (
         subChunk.startsWith("**") &&
         subChunk.endsWith("**") &&
         subChunk.length >= 4
       ) {
         const boldText = subChunk.slice(2, -2);
-        return (
+        return [
           <strong
             key={`bold-${idx}-${subIdx}`}
             style={{ fontWeight: 600 }}
             className="opacity-100"
           >
             {boldText}
-          </strong>
-        );
+          </strong>,
+        ];
       }
-      return <span key={`txt-${idx}-${subIdx}`}>{subChunk}</span>;
+
+      // Parse markdown links: [text](url)
+      const linkChunks = subChunk.split(/(\[[^\]]+\]\([^\)]+\))/g);
+      return linkChunks.map((linkChunk, linkIdx) => {
+        const match = linkChunk.match(/^\[(.*?)\]\((.*?)\)$/);
+        if (match) {
+          const linkText = match[1];
+          const url = match[2];
+          return (
+            <a
+              key={`link-${idx}-${subIdx}-${linkIdx}`}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-rose-500 dark:text-rose-400 hover:opacity-80 underline transition-opacity"
+            >
+              {linkText}
+            </a>
+          );
+        }
+        return <span key={`txt-${idx}-${subIdx}-${linkIdx}`}>{linkChunk}</span>;
+      });
     });
   });
 }
@@ -350,6 +371,31 @@ function renderMarkdownBlocks(content: string): React.ReactNode[] {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="w-full h-full"
+            />
+          </div>,
+        );
+        i += 1;
+        continue;
+      }
+    }
+
+    if (line.startsWith("![")) {
+      const imgMatch = line.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (imgMatch) {
+        const alt = imgMatch[1];
+        let src = imgMatch[2];
+        if (!src.startsWith("/") && !src.startsWith("http")) {
+          src = "/" + src;
+        }
+        blocks.push(
+          <div
+            key={`img-${i}`}
+            className="mt-6 w-full rounded-xl overflow-hidden shadow-md border border-black/10 dark:border-white/10 hover:shadow-xl transition-all duration-300 bg-black/5 dark:bg-white/5"
+          >
+            <img
+              src={src}
+              alt={alt}
+              className="w-full h-auto object-cover transition-transform duration-300 hover:scale-[1.01]"
             />
           </div>,
         );
