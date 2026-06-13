@@ -46,34 +46,32 @@ const blogPosts: BlogPost[] = [
     projectName: "Insighta Profiles API, Web Portal & CLI Tool",
     summary:
       "Architecture decisions, OAuth + PKCE implementation details, and what changed after scaling the API design.",
-    content: [
-      "# Writeup Template: Insighta Profiles API",
-      "",
-      "## 1. Quick Context",
-      "Write 3-5 lines on what you were building and why this project mattered.",
-      "",
-      "## 2. Problem Statement",
-      "- What constraints did you have?",
-      "- What user or business problem were you solving?",
-      "",
-      "## 3. Architecture Decisions",
-      "- Decision 1: why you chose it",
-      "- Decision 2: tradeoffs considered",
-      "",
-      "## 4. Implementation Highlights",
-      "Describe key endpoints, modules, or flows you are proud of.",
-      "",
-      "## 5. Challenges and Fixes",
-      "- Challenge",
-      "- How you debugged it",
-      "- Final fix",
-      "",
-      "## 6. Outcomes",
-      "Share measurable impact or quality improvements.",
-      "",
-      "## 7. Lessons Learned",
-      "What would you keep, change, or improve in v2?",
-    ].join("\n"),
+    content: `# Writeup Template: Insighta Profiles API
+
+## 1. Quick Context
+Write 3-5 lines on what you were building and why this project mattered.
+
+## 2. Problem Statement
+- What constraints did you have?
+- What user or business problem were you solving?
+
+## 3. Architecture Decisions
+- Decision 1: why you chose it
+- Decision 2: tradeoffs considered
+
+## 4. Implementation Highlights
+Describe key endpoints, modules, or flows you are proud of.
+
+## 5. Challenges and Fixes
+- Challenge
+- How you debugged it
+- Final fix
+
+## 6. Outcomes
+Share measurable impact or quality improvements.
+
+## 7. Lessons Learned
+What would you keep, change, or improve in v2?`,
   },
   {
     slug: "http-retry-engine",
@@ -81,33 +79,31 @@ const blogPosts: BlogPost[] = [
     projectName: "HTTP Retry Engine",
     summary:
       "Designing a robust retry loop, modeling attempt history, and handling failure states safely.",
-    content: [
-      "# Writeup Template: HTTP Retry Engine",
-      "",
-      "## 1. Goal",
-      "Explain what the retry engine needed to accomplish.",
-      "",
-      "## 2. Failure Model",
-      "- Which status codes should retry?",
-      "- Which should fail permanently?",
-      "",
-      "## 3. Core Design",
-      "- Worker loop and polling interval",
-      "- Attempt tracking strategy",
-      "- Dead-letter behavior",
-      "",
-      "## 4. Backoff Strategy",
-      "Document your backoff formula and jitter approach.",
-      "",
-      "## 5. API Surface",
-      "List key endpoints and why each one exists.",
-      "",
-      "## 6. Testing and Validation",
-      "How did you verify correctness and reliability?",
-      "",
-      "## 7. What I Learned",
-      "Summarize practical lessons from distributed systems behavior.",
-    ].join("\n"),
+    content: `# Writeup Template: HTTP Retry Engine
+
+## 1. Goal
+Explain what the retry engine needed to accomplish.
+
+## 2. Failure Model
+- Which status codes should retry?
+- Which should fail permanently?
+
+## 3. Core Design
+- Worker loop and polling interval
+- Attempt tracking strategy
+- Dead-letter behavior
+
+## 4. Backoff Strategy
+Document your backoff formula and jitter approach.
+
+## 5. API Surface
+List key endpoints and why each one exists.
+
+## 6. Testing and Validation
+How did you verify correctness and reliability?
+
+## 7. What I Learned
+Summarize practical lessons from distributed systems behavior.`,
   },
   {
     slug: "skillbridge-api",
@@ -115,281 +111,94 @@ const blogPosts: BlogPost[] = [
     projectName: "SkillBridge API",
     summary:
       "From URL hallucination fixes to employer verification and assessment flow stability.",
-    content: [
-      "# Writeup Template: SkillBridge API",
-      "",
-      "## 1. Project Context",
-      "Briefly explain the team setup and the stage of the platform.",
-      "",
-      "## 2. Key Issues I Tackled",
-      "- Issue A",
-      "- Issue B",
-      "- Issue C",
-      "",
-      "## 3. Technical Deep Dive",
-      "Choose one issue and walk through your approach in detail.",
-      "",
-      "## 4. Collaboration and PR Flow",
-      "Share how you coordinated changes across contributors.",
-      "",
-      "## 5. Impact",
-      "What improved for employers, candidates, or system reliability?",
-      "",
-      "## 6. Reflections",
-      "What this taught you about working in a large codebase.",
-    ].join("\n"),
+    content: `# Writeup Template: SkillBridge API
+
+## 1. Project Context
+Briefly explain the team setup and the stage of the platform.
+
+## 2. Key Issues I Tackled
+- Issue A
+- Issue B
+- Issue C
+
+## 3. Technical Deep Dive
+Choose one issue and walk through your approach in detail.
+
+## 4. Collaboration and PR Flow
+Share how you coordinated changes across contributors.
+
+## 5. Impact
+What improved for employers, candidates, or system reliability?
+
+## 6. Reflections
+What this taught you about working in a large codebase.`,
   },
   {
     slug: "zubbee-scheduler",
-    title:
-      "Building Zubbee Scheduler for Priority Queues, Retries, and a Live Dashboard",
-    projectName: "Zubbee Scheduler",
+    title: "The Highlight of HNG Experience",
+    projectName: "Zubbee Scheduler & SkillBridge API",
     summary:
-      "A background job scheduler with priority queuing, retry limits, a dead-letter queue, and a live React dashboard.",
-    content: [
-      "# Zubbee Scheduler",
-      "",
-      "A background job scheduler with priority queuing, retries, dead-letter queue, and a live React dashboard. This was built as part of the Dilamme R&D Stage 9 challenge.",
-      "",
-      "---",
-      "",
-      "## What It Does",
-      "",
-      "Jobs can get created, queued, processed, and tracked. Workers run independently in the background to handle failure on its own in any of the scheduled jobs. A scheduler that only works in the happy path is broken and tries a maximum of 3 times. If it remains failed after 3 tries, it is added to the dead letter queue that can be reviewed and retried again.",
-      "",
-      "## ![alt text](image.png)",
-      "",
-      "## Setup",
-      "",
-      "### Prerequisites",
-      "",
-      "- Node.js v20+",
-      "- npm",
-      "",
-      "### Install",
-      "",
-      "```bash",
-      "git clone https://github.com/Zubbee18/zubbee-scheduler.git",
-      "cd zubbee-scheduler",
-      "npm install",
-      "```",
-      "",
-      "### Start the server",
-      "",
-      "```bash",
-      "node src/index.js",
-      "node start index.js",
-      "```",
-      "",
-      "### Start the worker",
-      "",
-      "```bash",
-      "node src/worker.js",
-      "node start worker-start.js",
-      "```",
-      "",
-      "---",
-      "",
-      "## API Endpoints",
-      "",
-      "### Create a job",
-      "",
-      "```bash",
-      "curl -X POST http://localhost:3000/jobs \\",
-      '  -H "Content-Type: application/json" \\',
-      '  -d \'{"type":"send_email","priority":1,"payload":{"to":"test@gmail.com","subject":"Hello"}}\'',
-      "```",
-      "",
-      "### Get a job",
-      "",
-      "```bash",
-      "curl http://localhost:3000/jobs/1",
-      "```",
-      "",
-      "### Filter by status",
-      "",
-      "```bash",
-      "curl http://localhost:3000/jobs?status=failed",
-      "```",
-      "",
-      "### Cancel a job",
-      "",
-      "```bash",
-      "curl -X PATCH http://localhost:3000/jobs/1/cancel",
-      "```",
-      "",
-      "### View dead-letter queue",
-      "",
-      "```bash",
-      "curl http://localhost:3000/dlq",
-      "```",
-      "",
-      "### Manually retry a DLQ job",
-      "",
-      "```bash",
-      "curl -X POST http://localhost:3000/dlq/1/retry",
-      "```",
-      "",
-      "## Architecture Diagram",
-      "",
-      "## ![alt text](image-1.png)",
-      "",
-      "## Data Flow",
-      "",
-      "```plaintext",
-      "┌─────────────────────────────────────────────────────────────┐",
-      "│                        React UI (Vite)                      │",
-      "│  Dashboard · Jobs Table · Playground · DLQ · Stats         │",
-      "└───────────────────────────┬─────────────────────────────────┘",
-      "                            │ HTTP (polling every 3s)",
-      "┌───────────────────────────▼─────────────────────────────────┐",
-      "│                   Express API Server (:3000)                 │",
-      "│  POST /jobs   GET /jobs   PATCH /jobs/:id/cancel            │",
-      "│  GET /jobs/counts   GET /dlq   POST /dlq/:id/retry          │",
-      "│  GET /api-docs  (Swagger UI)                                │",
-      "└───────────────────────────┬─────────────────────────────────┘",
-      "                            │ better-sqlite3 (WAL mode)",
-      "┌───────────────────────────▼─────────────────────────────────┐",
-      "│                   SQLite Database (database.db)              │",
-      "│  jobs · attempts · job_dependencies · dlq                   │",
-      "└───────────────────────────┬─────────────────────────────────┘",
-      "                            │ reads/writes",
-      "┌───────────────────────────▼─────────────────────────────────┐",
-      "│                        Worker Process                        │",
-      "│  Heap scheduler · TimingWheel scheduler · DAG gate          │",
-      "│  Retry/backoff · DLQ insertion · Recurring job re-queue     │",
-      "└───────────────────────────┴─────────────────────────────────┘",
-      "```",
-      "",
-      "---",
-      "",
-      "## Scheduling Algorithms",
-      "",
-      "### Heap",
-      "",
-      "The worker uses a min-heap to order jobs for processing. On every poll cycle, all ready pending jobs (where scheduledAt <= now) are loaded from the database and inserted into the heap.",
-      "",
-      "#### Comparator (in priority order)",
-      "",
-      "1. Starvation prevention (aging): If a job has been waiting longer than TIMING_MIN minutes (set via environment variable, default behaviour when unset is 2 minutes), it is treated as highest priority regardless of its declared priority level so that low-priority jobs cannot be starved indefinitely.",
-      "",
-      "2. Declared priority: 1 (High) beats 2 (Medium) beats 3 (Low).",
-      "",
-      "3. Scheduled time: Earlier `scheduledAt` wins among equal-priority jobs.",
-      "",
-      "4. Creation time: Earlier `createdAt` breaks remaining ties (FIFO within the same priority bucket).",
-      "",
-      "```js",
-      "compare(a, b) {",
-      "",
-      "  const aTooLong = now new Date(a.createdAt) >= TIMING_MIN_MS;",
-      "",
-      "  const bTooLong = now new Date(b.createdAt) >= TIMING_MIN_MS;",
-      "",
-      "  if (aTooLong !== bTooLong) return aTooLong ? -1 : 1; // aged job runs first",
-      "",
-      "  if (a.priority !== b.priority) return a.priority b.priority;",
-      "",
-      "  if (a.scheduledAt !== b.scheduledAt) return new Date(a.scheduledAt) new Date(b.scheduledAt);",
-      "",
-      "  return new Date(a.createdAt) new Date(b.createdAt);",
-      "",
-      "}",
-      "```",
-      "",
-      "Heap operations: O(log n) insert and extract-min; O(1) peek.",
-      "",
-      "### Timing Wheel",
-      "",
-      "The timing wheel is a circular buffer with 3600 slots, each representing one tickMs (1 second) of time. Jobs are placed into the slot corresponding to how far in the future they are scheduled. How is it circular? It is circular in the number of rounds it is set in. For example, if a job is set 3601ms from now then its round will be 1 tick after the first 3600 ticks.",
-      "",
-      "#### How it works",
-      "",
-      "1. Schedule: Given a job's `scheduledAt`, compute `delayMs = scheduledAt` now. Calculate `ticks = ceil(delayMs / tickMs)`, then `slot = (cursor + ticks) % 3600`. A rounds counter handles delays longer than one full revolution of the wheel (`rounds = floor((ticks 1) / 3600)`).",
-      "",
-      "2. Tick: Advance the cursor by one slot. For each job in that slot, decrement rounds. Jobs with rounds == 0 are due and returned for processing. Within a slot, jobs are sorted by creation time.",
-      "",
-      "3. Priority: How priority is implemented with the timing wheel algorithm. Each bucket slot is partitioned by priority (1/2/3) so high-priority due jobs are returned first within the same tick. Within each priority bucket, there is a check on scheduled time and the earliest are presented first.",
-      "",
-      "4. Complexity: O(1) schedule and O(1) tick (amortised over the number of due jobs). For large volumes of short-interval recurring jobs, the timing wheel significantly outperforms the heap on tick throughput.",
-      "",
-      "## Benchmark Results for Heap vs Timing Wheel",
-      "",
-      "Run with: `node benchmark.js`",
-      "",
-      "| Operation   | Min-Heap | Timing Wheel  |",
-      "| ----------- | -------- | ------------- |",
-      "| Insert 10k  | 36.78ms  | 47.83ms       |",
-      "| Extract 10k | 514.58ms | 4.29ms (tick) |",
-      "",
-      "---",
-      "",
-      "## Starvation Prevention",
-      "",
-      "To prevent starvation in the system where low-priority jobs have stayed for a long time, their age is considered before their priority. If it has been created more than 2 minutes ago, it goes before other high-priority jobs.",
-      "",
-      "---",
-      "",
-      "## DAG Workflows",
-      "",
-      "Jobs can declare dependencies via `dependsOn: [jobId, ...]` at creation time. Edges are stored in the `job_dependencies` table.",
-      "",
-      "Before the worker processes a job extracted from the heap, it queries all dependency job statuses:",
-      "",
-      "```sql",
-      "SELECT d.dependsOnJobId, j.status",
-      "FROM job_dependencies d",
-      "JOIN jobs j ON j.id = d.dependsOnJobId",
-      "WHERE d.jobId = ?",
-      "```",
-      "",
-      "If any dependency is not `completed`, the job is skipped for this cycle and returned to the pool. It will be re-evaluated on the next worker poll (every 500 ms).",
-      "",
-      "---",
-      "",
-      "## Cancellation Edge Case",
-      "",
-      "When `PATCH /jobs/:id/cancel` is called, the database status is set to `cancelled` atomically (only if current status is `pending` or `processing`). If a worker is currently executing the job, it checks the database status immediately after the handler resolves, before writing any result. If `cancelled` is found, finalization is silently skipped — no `completed` or `failed` record is written.",
-      "",
-      "---",
-      "",
-      "## What I Struggled With",
-      "",
-      "I was already half into my backend work when I realised the tradeoffs that come with using SQLite. I had to make the decision to work with it or change my schema entirely. I had to think about whether it was really necessary to use PostgreSQL. I learned about keeping things simple. If the tradeoff is something you can work with, there's no need to overdesign. Partly laziness and partly system design principles, I was able work with it by enabling `journal_mode=WAL` to enable concurrent read and writes.",
-      "",
-      "---",
-      "",
-      "## What I Learned",
-      "",
-      "1. Heap data structures and how to implement them in JavaScript, both max and min",
-      "2. Timing wheel algorithm and how to implement it",
-      "3. Tradeoffs of using SQLite in a system with multiple async operations",
-      "4. Designing the simplest system possible for users' current needs",
-      "5. The WAL journal mode in SQLite",
-      "6. DAG workflows",
-      "7. How to deploy processes on an AWS EC2 instance",
-      "8. The role of Nginx, DNS and Certbort in deployment and how deployment is probably done in services like Railway, Render and Heroku",
-      "9. How easy it is to certify your domain",
-      "",
-      "---",
-      "",
-      "## Resources",
-      "",
-      "1. Heap visualisation: <https://visualgo.net/en/heap>",
-      "2. Better-sqlite3 docs: <https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md>",
-      "3. PM2 quickstart: <https://pm2.keymetrics.io/docs/usage/quick-start>",
-      "4. DuckDNS setup: <https://www.duckdns.org/install.jsp>",
-      "5. Certbot Nginx guide: <https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal>",
-      "6. Nginx beginner guide: <https://nginx.org/en/docs/beginners_guide.html>",
-      "7. DAG explanation with visuals: <https://www.youtube.com/results?search_query=DAG+directed+acyclic+graph+explained>",
-      "8. Timing wheel deep dive: <https://blog.acolyer.org/2015/12/18/hashed-and-hierarchical-timing-wheels>",
-    ].join("\n"),
+      "A technical blog post reflecting on two key internship milestones: building the custom Zubbee background job scheduler and resolving production issues in the collaborative SkillBridge API.",
+    content: `
+
+During my time in the HNG internship, I worked on several challenging individual stages and collaborated on team projects. Out of all the tasks, two specific milestones stood out as the most technically demanding and rewarding: the Zubbee Scheduler (individual stage) and the SkillBridge API (team task). Here is the technical breakdown of both systems, what broke, and what I learned from them.
+
+
+## Task 1: Zubbee Scheduler (Individual Stage)
+
+### 1. What it was
+Zubbee Scheduler is a lightweight, self-contained background job scheduling queue with priority handling, automatic retries, a dead-letter queue (DLQ) for failed tasks, DAG-based task dependency workflows, and a live monitoring dashboard.
+
+### 2. The problem it was solving
+Production apps often need to process time-consuming asynchronous tasks (like sending notifications or parsing large files) without blocking the main event loop. While robust solutions like BullMQ exist, they require heavy external dependencies like Redis. Zubbee Scheduler was designed to solve this by providing priority queuing, timing-wheel execution, and workflow orchestration using SQLite as the sole database engine.
+
+### 3. How I approached it
+- Dual Scheduling Engines: I built and benchmarked two separate scheduling approaches:
+  - A Min-Heap for O(log N) inserts and O(1) peek, ideal for picking the next due job based on priority, scheduling time, and creation time.
+  - A Hashed Timing Wheel containing 3600 slots representing 1-second ticks, optimized for high-throughput short-interval recurring tasks.
+- Starvation Prevention: Implemented an "aging" comparator. If a low-priority job waits in the queue for more than 2 minutes, the worker automatically treats it as highest priority.
+- DAG Workflows: Designed a dependency table matching parents to child jobs, only releasing dependent jobs when parent queries returned a \`completed\` state.
+
+### 4. What broke and how I fixed it
+- The Issue (Database Locking): Because both the Express API and the background worker were constantly querying and modifying the same SQLite database, we repeatedly ran into \`SQLITE_BUSY\` database lock errors under load.
+- The Fix: I updated the SQLite connection settings to enable Write-Ahead Logging (\`journal_mode=WAL\`). This allowed multiple processes to perform concurrent reads while a write transaction was active, eliminating lock contentions.
+
+### 5. What I took away from it
+Building this taught me how scheduling data structures are designed from the ground up. I learned how to balance memory and time complexity (benchmarking heap vs. timing wheel) and how SQLite handles concurrency in real-world environments.
+
+### 6. Why I picked it
+I chose this project because it forced me to implement core computer science data structures (like Heaps and circular Timing Wheels) instead of just relying on ready-made npm packages, teaching me the underlying mechanics of background workers.
+
+---
+
+## Task 2: SkillBridge API (Team Task)
+
+### 1. What it was
+The backend API for SkillBridge, an AI-powered talent assessment and employer-candidate matching platform built collaboratively using NestJS, TypeScript, PostgreSQL, and TypeORM.
+
+### 2. The problem it was solving
+The platform connects candidates and employers by running AI-driven skill assessments. However, the system had critical stability issues: the LLM frequently generated fake reference links (URL hallucinations), unverified employers were initiating actions, and concurrent assessment retakes bypassed security limits.
+
+### 3. How I approached it
+- UrlResolutionService: Built an validation service leveraging the YouTube Data API v3 and Serper.dev Google Search to check and filter AI-generated resources, swapping out hallucinated links.
+- Employer Trust Layer: Designed the employer verification pipeline, implementing SSRF-hardened reachability checks for company websites and LinkedIn verification gates to prevent unverified outreach.
+- Assessment Optimization: Refactored skill assessments to strict MCQ scoring, standardized database question count schemas, and added configurable timeouts with background cache warming.
+
+### 4. What broke and how I fixed it
+- The Issue (Concurrency Bypass): During high-concurrency testing, candidates could launch multiple assessment attempts simultaneously by spamming the endpoint before the first attempt was fully written to PostgreSQL, bypassing cooldown restrictions.
+- The Fix: I wrapped the attempt verification and creation step in a database transaction with pessimistic locking in TypeORM. This locked the user's attempt state during validation, blocking concurrent duplicate entries.
+
+### 5. What I took away from it
+Working on SkillBridge taught me how to collaborate effectively in a larger codebase. Enforcing API standards (response normalization, snake_case conversion) and coordinating 23+ pull requests reinforced developer discipline.
+
+### 6. Why I picked it
+I picked this because it highlights the complexity of working within a team. Resolving real-world security vulnerabilities, optimizing performance, and handling LLM hallucination issues gave me a strong appreciation for defensive API design.`,
   },
 ];
 
 function renderInlineMarkdown(text: string): React.ReactNode[] {
   const chunks = text.split(/(`[^`]+`)/g);
-  return chunks.map((chunk, idx) => {
+  return chunks.flatMap((chunk, idx) => {
     if (chunk.startsWith("`") && chunk.endsWith("`") && chunk.length >= 2) {
       const code = chunk.slice(1, -1);
       return (
@@ -406,7 +215,20 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
         </code>
       );
     }
-    return <span key={`txt-${idx}`}>{chunk}</span>;
+
+    // Split the plain text chunk by double asterisks for bolding
+    const subChunks = chunk.split(/(\*\*[^*]+\*\*)/g);
+    return subChunks.map((subChunk, subIdx) => {
+      if (subChunk.startsWith("**") && subChunk.endsWith("**") && subChunk.length >= 4) {
+        const boldText = subChunk.slice(2, -2);
+        return (
+          <strong key={`bold-${idx}-${subIdx}`} style={{ fontWeight: 600 }} className="opacity-100">
+            {boldText}
+          </strong>
+        );
+      }
+      return <span key={`txt-${idx}-${subIdx}`}>{subChunk}</span>;
+    });
   });
 }
 
@@ -420,6 +242,17 @@ function renderMarkdownBlocks(content: string): React.ReactNode[] {
     const line = rawLine.trim();
 
     if (!line) {
+      i += 1;
+      continue;
+    }
+
+    if (line === "---" || line === "***" || line === "___") {
+      blocks.push(
+        <hr
+          key={`hr-${i}`}
+          className="my-8 border-t border-black/10 dark:border-white/10"
+        />,
+      );
       i += 1;
       continue;
     }
@@ -536,7 +369,10 @@ function renderMarkdownBlocks(content: string): React.ReactNode[] {
       !/^(#|##|###)\s+/.test(lines[i].trim()) &&
       !/^\s*(-|\*)\s+/.test(lines[i]) &&
       !/^\s*\d+\.\s+/.test(lines[i]) &&
-      !lines[i].trim().startsWith("```")
+      !lines[i].trim().startsWith("```") &&
+      lines[i].trim() !== "---" &&
+      lines[i].trim() !== "***" &&
+      lines[i].trim() !== "___"
     ) {
       paragraphLines.push(lines[i].trim());
       i += 1;
