@@ -16,6 +16,7 @@ type LinkPreviewProps = {
   className?: string;
   width?: number;
   height?: number;
+  previewContent?: React.ReactNode;
 } & (
   | { isStatic: true; imageSrc: string }
   | { isStatic?: false; imageSrc?: never }
@@ -29,10 +30,16 @@ export const LinkPreview = ({
   height = 125,
   isStatic = false,
   imageSrc = "",
+  previewContent,
 }: LinkPreviewProps) => {
+  const isLocal = url.startsWith("#");
+
   const src = React.useMemo(() => {
     if (isStatic) {
       return imageSrc;
+    }
+    if (isLocal) {
+      return "";
     }
 
     const params = encode({
@@ -48,13 +55,15 @@ export const LinkPreview = ({
     });
 
     return `https://api.microlink.io/?${params}`;
-  }, [height, imageSrc, isStatic, url, width]);
+  }, [height, imageSrc, isStatic, url, width, isLocal]);
 
   const [isOpen, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    const img = new window.Image();
-    img.src = src;
+    if (src) {
+      const img = new window.Image();
+      img.src = src;
+    }
   }, [src]);
 
   const springConfig = { stiffness: 100, damping: 15 };
@@ -80,8 +89,8 @@ export const LinkPreview = ({
       <HoverCardPrimitive.Trigger asChild>
         <a
           href={url}
-          target="_blank"
-          rel="noopener noreferrer"
+          target={isLocal ? undefined : "_blank"}
+          rel={isLocal ? undefined : "noopener noreferrer"}
           onMouseMove={handleMouseMove}
           className={cn("text-black dark:text-white", className)}
         >
@@ -90,7 +99,7 @@ export const LinkPreview = ({
       </HoverCardPrimitive.Trigger>
 
       <HoverCardPrimitive.Content
-        className="[transform-origin:var(--radix-hover-card-content-transform-origin)]"
+        className="[transform-origin:var(--radix-hover-card-content-transform-origin)] z-50"
         side="top"
         align="center"
         sideOffset={10}
@@ -115,23 +124,34 @@ export const LinkPreview = ({
                 x: translateX,
               }}
             >
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-1 bg-white border-2 border-transparent shadow rounded-xl hover:border-neutral-200 dark:hover:border-neutral-800"
-                style={{ fontSize: 0 }}
-              >
-                <img
-                  src={src}
-                  width={width}
-                  height={height}
-                  className="rounded-lg"
-                  alt="preview image"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
+              {previewContent ? (
+                <a
+                  href={url}
+                  target={isLocal ? undefined : "_blank"}
+                  rel={isLocal ? undefined : "noopener noreferrer"}
+                  className="block p-4 bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-neutral-800 shadow-xl rounded-xl text-left max-w-[280px]"
+                >
+                  {previewContent}
+                </a>
+              ) : (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-1 bg-white border-2 border-transparent shadow rounded-xl hover:border-neutral-200 dark:hover:border-neutral-800"
+                  style={{ fontSize: 0 }}
+                >
+                  <img
+                    src={src}
+                    width={width}
+                    height={height}
+                    className="rounded-lg"
+                    alt="preview image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

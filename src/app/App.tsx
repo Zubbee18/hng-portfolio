@@ -318,15 +318,13 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
           const linkText = match[1];
           const url = match[2];
           return (
-            <a
+            <LinkPreview
               key={`link-${idx}-${subIdx}-${linkIdx}`}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-rose-500 dark:text-rose-400 hover:opacity-80 underline transition-opacity"
+              url={url}
+              className="text-rose-500 dark:text-rose-400 hover:opacity-80 underline transition-opacity inline"
             >
               {linkText}
-            </a>
+            </LinkPreview>
           );
         }
         return <span key={`txt-${idx}-${subIdx}-${linkIdx}`}>{linkChunk}</span>;
@@ -935,15 +933,12 @@ export default function App() {
                     </p>
                     <div className="flex gap-6 items-center pt-4">
                       {p.live && (
-                        <a
-                          href={p.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <LinkPreview
+                          url={p.live}
                           className="opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] uppercase"
-                          style={{ letterSpacing: "1px" }}
                         >
                           Live <ExternalLink size={10} />
-                        </a>
+                        </LinkPreview>
                       )}
                       {p.source && (
                         <LinkPreview
@@ -954,24 +949,41 @@ export default function App() {
                         </LinkPreview>
                       )}
                       {p.extraLinks?.map((link) => (
-                        <a
+                        <LinkPreview
                           key={link.label}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          url={link.url}
                           className="opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] uppercase"
-                          style={{ letterSpacing: "1px" }}
                         >
                           {link.label} <ExternalLink size={10} />
-                        </a>
+                        </LinkPreview>
                       ))}
-                      <a
-                        href={`#/blog/${encodeURIComponent(p.blogSlug)}`}
+                      <LinkPreview
+                        url={`#/blog/${encodeURIComponent(p.blogSlug)}`}
                         className="opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1.5 text-[10px] uppercase"
-                        style={{ letterSpacing: "1px" }}
+                        previewContent={
+                          (() => {
+                            const post = blogPosts.find((post) => post.slug === p.blogSlug);
+                            return (
+                              <div className="flex flex-col gap-1 text-left">
+                                <span
+                                  className="text-[9px] uppercase opacity-50 tracking-wider"
+                                  style={{ fontFamily: mono }}
+                                >
+                                  {post?.projectName}
+                                </span>
+                                <h4 className="text-[13px] font-semibold leading-tight pt-0.5">
+                                  {post?.title}
+                                </h4>
+                                <p className="text-[11px] opacity-70 leading-snug pt-1">
+                                  {post?.summary}
+                                </p>
+                              </div>
+                            );
+                          })()
+                        }
                       >
                         Blog <BookOpen size={10} />
-                      </a>
+                      </LinkPreview>
                     </div>
                   </div>
                 ))}
