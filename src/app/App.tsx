@@ -46,31 +46,31 @@ const blogPosts: BlogPost[] = [
     projectName: "Insighta Profiles API, Web Portal & CLI Tool",
     summary:
       "Architecture decisions, OAuth + PKCE implementation details, and what changed after scaling the API design.",
-    content: `# Writeup Template: Insighta Profiles API
+    content: `
 
-## 1. Quick Context
+# Quick Context
 Write 3-5 lines on what you were building and why this project mattered.
 
-## 2. Problem Statement
+# Problem Statement
 - What constraints did you have?
 - What user or business problem were you solving?
 
-## 3. Architecture Decisions
+# Architecture Decisions
 - Decision 1: why you chose it
 - Decision 2: tradeoffs considered
 
-## 4. Implementation Highlights
+# Implementation Highlights
 Describe key endpoints, modules, or flows you are proud of.
 
-## 5. Challenges and Fixes
+# Challenges and Fixes
 - Challenge
 - How you debugged it
 - Final fix
 
-## 6. Outcomes
+# Outcomes
 Share measurable impact or quality improvements.
 
-## 7. Lessons Learned
+# Lessons Learned
 What would you keep, change, or improve in v2?`,
   },
   {
@@ -79,31 +79,71 @@ What would you keep, change, or improve in v2?`,
     projectName: "HTTP Retry Engine",
     summary:
       "Designing a robust retry loop, modeling attempt history, and handling failure states safely.",
-    content: `# Writeup Template: HTTP Retry Engine
+    content: `
 
-## 1. Goal
-Explain what the retry engine needed to accomplish.
+# Goal
+The goal of this project was to design and implement a background HTTP retry service. Clients submit a request, and a worker retries it automatically on failure using exponential backoff with jitter. Execution halts when the request succeeds, hits a permanent failure status code (4xx), or exhausts the maximum retry limit.
 
-## 2. Failure Model
-- Which status codes should retry?
-- Which should fail permanently?
+# Failure Model
+- **Permanent Failures (4xx)**: A 4xx status code means the request itself is malformed or invalid (e.g., bad URL, missing authorization, bad request body). Since retrying will not resolve the issue, these requests fail permanently on the first attempt and are not retried.
+- **Retryable Failures (5xx & Network Errors)**: A 5xx status code indicates a temporary server-side issue (crash, timeout, overloading) or network disruptions. These requests are eligible for retry as the target server is expected to recover.
 
-## 3. Core Design
-- Worker loop and polling interval
-- Attempt tracking strategy
-- Dead-letter behavior
+# Core Design
+- **Worker Loop**: A background worker polling every 500ms queries the SQLite database for pending or retrying requests whose scheduled retry time (\`nextRetryAt\`) has elapsed.
+- **Attempt Tracking**: Every request execution is logged in a separate \`attempts\` database table, capturing attempt numbers, status codes, timestamps, and error logs for detailed audits.
+- **Dead-Letter Queue (DLQ)**: If a request fails repeatedly and the attempt count exceeds the configurable limit (\`maxRetries\`, defaulting to 5), it is marked as \`failed\` and moved to a dead-letter state to prevent infinite loops.
 
-## 4. Backoff Strategy
-Document your backoff formula and jitter approach.
+# Backoff Strategy
+- **Formula**: The wait time for the next retry increases exponentially with each attempt, using the formula:
+  \`delay = backoffMs * (2 ^ attempt) * jitter\`
+- **Jitter**: To resolve the "thundering herd" problem where multiple clients retry at the exact same millisecond, a random multiplier between 0.8 and 1.2 is applied. This spreads retries out naturally.
 
-## 5. API Surface
-List key endpoints and why each one exists.
+# API Surface
+- \`POST /request\`: Submits a request to be executed (supports \`url\`, \`method\`, optional \`body\`, optional \`maxRetries\`, and optional \`backoffMs\`).
+- \`GET /requests/:id\`: Retrieves the current request status along with its full attempt logs history.
+- \`GET /requests?status=\`: Queries and filters submitted requests by status (\`pending\`, \`retrying\`, \`completed\`, \`failed\`).
 
-## 6. Testing and Validation
-How did you verify correctness and reliability?
+# Testing and Validation
+Correctness was validated using a mock server on port 3001 configured to fail three times consecutively before succeeding. A test script registered requests and polled the retry engine every second, verifying that the worker successfully navigated the retry cycle and ultimately marked the request as completed.
 
-## 7. What I Learned
-Summarize practical lessons from distributed systems behavior.`,
+## Screenshots
+![alt text](images/image.png)
+
+![alt text](images/image-1.png)
+
+![alt text](images/image-2.png)
+
+# What I Learned
+## Technical Highlights & SQLite Params
+To handle optional properties (\`maxRetries\` and \`backoffMs\`), I replaced positional SQLite queries with named database parameters (\`@param\`). Using objects made it simple to inject default fallbacks without writing complex if-else logic:
+
+\`\`\`js
+// Positional method — every ? must match the exact order of values
+// Handling optional fields meant branching logic just to build the right array
+const insert = db.prepare(
+  "INSERT INTO requests (url, method, maxRetries, backoffMs) \\\\
+  VALUES (?, ?, ?, ?)",
+);
+insert.run(url, method, maxRetries ?? 5, backoffMs ?? 1000);
+
+// Named params method — use @name placeholders and pass an object
+// Now ?? defaults live right in the object, no branching needed
+const insert = db.prepare(
+  "INSERT INTO requests (url, method, maxRetries, backoffMs) \\\\
+  VALUES (@url, @method, @maxRetries, @backoffMs)",
+);
+insert.run({
+  url,
+  method,
+  maxRetries: maxRetries ?? 5,
+  backoffMs: backoffMs ?? 1000,
+});
+\`\`\`
+
+## Developer growth & architectural value
+This was my first time implementing standalone background workers. I learned how to build robust, non-blocking integrations for third-party endpoints. In a production scenario (such as sending OTP SMS via an external provider), routing these calls through a retry engine ensures that service outages or temporary rate limits do not impact core user flows like registration. While enterprise libraries like BullMQ solve this at scale, constructing this lightweight version deepened my understanding of background task execution and distributed failure handling.
+
+* **Resources Consulted**: [validator.js](https://github.com/validatorjs/validator.js)`,
   },
   {
     slug: "skillbridge-api",
@@ -111,36 +151,37 @@ Summarize practical lessons from distributed systems behavior.`,
     projectName: "SkillBridge API",
     summary:
       "From URL hallucination fixes to employer verification and assessment flow stability.",
-    content: `# Writeup: SkillBridge API
+    content: `
+    
+# Project Context
 
-## 1. Project Context
 The backend API for SkillBridge, an AI-powered talent assessment and employer-candidate matching platform built collaboratively using NestJS, TypeScript, PostgreSQL, and TypeORM.
 
 The platform connects candidates and employers by running AI-driven skill assessments to validate the talent pool while giving employers an opportunity to find them through job postings, custom assessments and offers. However, the system had critical stability issues while we were building, and I contributed to fixing those issues while implementing new features.
 
-## 2. Key Issues I Tackled
+# Key Issues I Tackled
 - LLM generated fake reference links (URL hallucinations) during the AI guidance report after assessments and when prompted to generate resource links for talent.
 - Long page-load wait times on the resource page, leading to a poor user experience.
 - Designing an employer verification pipeline and trust layer to prevent unverified outreach to talent.
 - Refactoring skill assessments to reduce wait times associated with AI scoring of open text.
 
-## 3. Technical Deep Dive
+# Technical Deep Dive
 I initially integrated resource links for the AI guidance layer for the completion result of advanced assessments and the general resources page independent of assessment results, but the generated resources from AI were usually hallucinated, and so most of the links were broken. To solve this issue, I built a validation service leveraging the YouTube Data API v3 and Serper.dev Google Search to check and filter AI-generated resources, swapping out hallucinated links. This was a non-breaking change that added a layer of verification to the AI-generated resources. For every title, description and link text generated, the title and description are used as a query to fetch data from either API depending on whether it was a video or not. Because the title and description were usually detailed, it mostly worked. Mostly. After many iterations, we came close to only 5% broken links compared to 95% before.
 
 Another issue with the AI-generated resource links was the long wait times on the page, which were really bad for UX. I added configurable timeouts with background cache warming so that for any new change in the talent profile, such as completing onboarding or an assessment, the generation service is automatically triggered in the background and saved into the database so that when the user lands on the resource page, the page load is instant. This improved the overall customer experience. As previously stated, page load wait time moved from an average of 3 minutes to none.
 
 I designed the employer verification pipeline, implementing SSRF-hardened reachability checks for company websites and LinkedIn verification gates to prevent unverified outreach to talent. Among many others were refactoring skill assessments to strict MCQ scoring to reduce the wait time that came from AI trying to score open text. Since we already had rubric scoring for the MCQ, assessment results became instant, going from about 3 mins previously.
 
-## 4. Collaboration and PR Flow
+# Collaboration and PR Flow
 Working on SkillBridge taught me how to collaborate effectively in a larger codebase. Enforcing API standards (response normalisation, snake_case conversion) and contributing 33+ pull requests reinforced my developer discipline. The complexity of working within a team. I also learnt the importance of API contracts and how creating them enforces good API design practices and conventions.
 
-## 5. Impact
+# Impact
 - Reduced broken AI-generated resource links from 95% to only 5%.
 - Brought resource page load times down from 3 minutes to instant via cache warming.
 - Designed employer verification gates to secure outreach and prevent unverified actions.
 - Assessment result generation went from 3 minutes to instant by moving to MCQ scoring.
 
-## 6. Reflections
+# Reflections
 Working on SkillBridge taught me how to collaborate effectively in a larger codebase. Resolving real-world security vulnerabilities, optimising performance, and handling LLM hallucination issues gave me a strong appreciation for defensive API design.
 
 Thinking about how my new feature could break the product or make it was good paranoia. I also learnt more than just writing code. I learnt how to use AI-assisted programming in the best way to both meet the demands of my team in increasing my productivity and also learn. I was in the best balance of speed and growth. My biggest lesson was the understanding that people are the major thing in every product and not just the thing. I learnt how interactions and communication make or break a product. Without putting myself out there to take chances and contribute, I will never be a productive developer. Basically, you're not that special (maybe genuises), and nobody is going to pause their own business to ask for your contributions. They just value who gives it first. Not fair but who cares? Personally, this was the highlight of my HNG experience.
@@ -352,40 +393,37 @@ function renderMarkdownBlocks(content: string): React.ReactNode[] {
       continue;
     }
 
-    if (line.startsWith("### ")) {
-      blocks.push(
-        <h4 key={`h4-${i}`} className="text-[18px] leading-[28px] pt-8">
-          {line.slice(4)}
-        </h4>,
-      );
-      i += 1;
-      continue;
-    }
-
-    if (line.startsWith("## ")) {
-      blocks.push(
-        <h3
-          key={`h3-${i}`}
-          className="text-[22px] leading-[32px] pt-10"
-          style={{ letterSpacing: "-0.4px" }}
-        >
-          {line.slice(3)}
-        </h3>,
-      );
-      i += 1;
-      continue;
-    }
-
-    if (line.startsWith("# ")) {
-      blocks.push(
-        <h2
-          key={`h2-${i}`}
-          className="text-[30px] leading-[40px] pt-8"
-          style={{ letterSpacing: "-0.8px", fontWeight: 500 }}
-        >
-          {line.slice(2)}
-        </h2>,
-      );
+    const headerMatch = line.match(/^(#{1,3})\s+(.*)$/);
+    if (headerMatch) {
+      const level = headerMatch[1].length;
+      const text = headerMatch[2].trim();
+      if (level === 1) {
+        blocks.push(
+          <h2
+            key={`h2-${i}`}
+            className="text-[30px] leading-[40px] pt-8"
+            style={{ letterSpacing: "-0.8px", fontWeight: 500 }}
+          >
+            {renderInlineMarkdown(text)}
+          </h2>,
+        );
+      } else if (level === 2) {
+        blocks.push(
+          <h3
+            key={`h3-${i}`}
+            className="text-[22px] leading-[32px] pt-10"
+            style={{ letterSpacing: "-0.4px" }}
+          >
+            {renderInlineMarkdown(text)}
+          </h3>,
+        );
+      } else {
+        blocks.push(
+          <h4 key={`h4-${i}`} className="text-[18px] leading-[28px] pt-8">
+            {renderInlineMarkdown(text)}
+          </h4>,
+        );
+      }
       i += 1;
       continue;
     }
