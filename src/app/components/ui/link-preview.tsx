@@ -20,7 +20,7 @@ type LinkPreviewProps = {
 } & (
   | { isStatic: true; imageSrc: string }
   | { isStatic?: false; imageSrc?: never }
-);
+) & Omit<React.ComponentPropsWithoutRef<"a">, "href">;
 
 export const LinkPreview = ({
   children,
@@ -31,14 +31,17 @@ export const LinkPreview = ({
   isStatic = false,
   imageSrc = "",
   previewContent,
+  ...props
 }: LinkPreviewProps) => {
   const isLocal = url.startsWith("#");
+  const isMailto = url.startsWith("mailto:");
+  const isSpecial = isLocal || isMailto;
 
   const src = React.useMemo(() => {
     if (isStatic) {
       return imageSrc;
     }
-    if (isLocal) {
+    if (isSpecial) {
       return "";
     }
 
@@ -55,7 +58,7 @@ export const LinkPreview = ({
     });
 
     return `https://api.microlink.io/?${params}`;
-  }, [height, imageSrc, isStatic, url, width, isLocal]);
+  }, [height, imageSrc, isStatic, url, width, isSpecial]);
 
   const [isOpen, setOpen] = React.useState(false);
 
@@ -89,10 +92,11 @@ export const LinkPreview = ({
       <HoverCardPrimitive.Trigger asChild>
         <a
           href={url}
-          target={isLocal ? undefined : "_blank"}
-          rel={isLocal ? undefined : "noopener noreferrer"}
+          target={isSpecial ? undefined : "_blank"}
+          rel={isSpecial ? undefined : "noopener noreferrer"}
           onMouseMove={handleMouseMove}
           className={cn("text-black dark:text-white", className)}
+          {...props}
         >
           {children}
         </a>
@@ -127,12 +131,18 @@ export const LinkPreview = ({
               {previewContent ? (
                 <a
                   href={url}
-                  target={isLocal ? undefined : "_blank"}
-                  rel={isLocal ? undefined : "noopener noreferrer"}
+                  target={isSpecial ? undefined : "_blank"}
+                  rel={isSpecial ? undefined : "noopener noreferrer"}
                   className="block p-4 bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-neutral-800 shadow-xl rounded-xl text-left max-w-[280px]"
                 >
                   {previewContent}
                 </a>
+              ) : isSpecial ? (
+                <div className="block p-3 bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-neutral-800 shadow-xl rounded-xl text-left max-w-[280px]">
+                  <p className="text-[12px] opacity-75">
+                    Navigate to {url}
+                  </p>
+                </div>
               ) : (
                 <a
                   href={url}
@@ -159,3 +169,4 @@ export const LinkPreview = ({
     </HoverCardPrimitive.Root>
   );
 };
+
