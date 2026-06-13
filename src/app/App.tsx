@@ -135,7 +135,7 @@ What this taught you about working in a large codebase.`,
   },
   {
     slug: "zubbee-scheduler",
-    title: "The Highlight of HNG Experience",
+    title: "The Highlight of my HNG Experience",
     projectName: "Zubbee Scheduler & SkillBridge API",
     summary:
       "A technical blog post reflecting on two key internship milestones: building the custom Zubbee background job scheduler and resolving production issues in the collaborative SkillBridge API.",
@@ -1057,7 +1057,7 @@ export default function App() {
                   className="opacity-50 text-[11px] uppercase pt-5"
                   style={{ fontFamily: mono, letterSpacing: "1px" }}
                 >
-                  Edit the content field in blogPosts to publish your writeup.
+                  Written by Zubbee™
                 </p>
                 <div className="pt-2">
                   {renderMarkdownBlocks(selectedPost.content)}
